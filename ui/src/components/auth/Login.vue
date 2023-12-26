@@ -51,9 +51,18 @@ export default {
 
   methods: {
     async submit() {
-      console.log(this.form);
-      return;
-      const response = await this.form.post("/api/login");
+      try {
+        const response = await this.form.post(
+          "http://127.0.0.1:8000/api/auth/login"
+        );
+
+        if (!response?.data?.error && response?.status == 200) {
+          console.log(response?.data?.message);
+          localStorage.setItem("auth_key", response?.data?.auth_key);
+        }
+      } catch (error) {
+        console.log("error :", error);
+      }
     },
   },
 };
