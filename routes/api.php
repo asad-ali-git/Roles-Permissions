@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +21,9 @@ Route::middleware(['web', 'api'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
     });
 
-    Route::middleware(['auth', 'auth.session'])->group(function () {
+    Route::middleware(['auth', 'auth.session', 'verify_auth_key'])->group(function () {
+
+        Route::resource('roles', RoleController::class);
     });
 });
 

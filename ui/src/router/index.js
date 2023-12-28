@@ -7,4 +7,10 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  to.name !== "auth.login" && !localStorage.getItem("auth_key")
+    ? next({ name: "auth.login" })
+    : next();
+});
+
 export default router;

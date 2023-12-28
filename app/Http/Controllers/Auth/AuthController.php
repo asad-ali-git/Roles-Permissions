@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use ErrorException;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -32,10 +31,10 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json([
+        throw ValidationException::withMessages([
             "error" => true,
             "email" => "The provided credentials do not match our records.",
-        ], 422);
+        ]);
     }
 
     /**

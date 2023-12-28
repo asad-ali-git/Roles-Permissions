@@ -2,10 +2,13 @@ const routes = [
   // AUTH ROUTES
   {
     path: "/auth",
+    beforeEnter: (to, from, next) => {
+      localStorage.getItem("auth_key") ? next({ name: "home" }) : next();
+    },
     children: [
       {
         path: "login",
-        name: "login",
+        name: "auth.login",
         component: () => import("@/components/auth/Login.vue"),
       },
     ],
@@ -17,7 +20,7 @@ const routes = [
     children: [
       {
         path: "",
-        name: "Home",
+        name: "home",
         component: () => import("@/views/Home.vue"),
       },
     ],
