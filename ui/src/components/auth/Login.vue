@@ -40,13 +40,22 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import Form from "vform";
 import Loading from "../general/Loading.vue";
-</script>
+import { useToast } from "vue-toastification";
+import config from "../../../config";
 
-<script>
 export default {
+  setup() {
+    const toast = useToast();
+    return { toast };
+  },
+
+  components: {
+    Loading,
+  },
+
   data: () => ({
     form: new Form({
       email: "",
@@ -55,6 +64,9 @@ export default {
     loading: false,
   }),
 
+  created() {
+    console.log('apiBaseUrl :', config.apiBaseUrl);
+  },
   methods: {
     async submit() {
       try {
@@ -64,13 +76,22 @@ export default {
         );
 
         if (!response?.data?.error && response?.status == 200) {
-          console.log(response?.data?.message);
           localStorage.setItem("auth_key", response?.data?.auth_key);
+          this.toast.success(response?.data?.message);
           this.$router.push({ name: "home" });
         }
-        this.loading = false;
       } catch (error) {
-        console.log("error :", error);
+        if (error.response.status === 422) {
+          const errorsMessage = error.response.data.errors;
+          Object.keys(errorsMessage).forEach((key) => {
+            if (typeof errorsMessage[key][0] == "string") {
+              this.toast.error(errorsMessage[key][0]);
+            }
+          });
+        } else {
+          this.toast.error("API Error on server side");
+        }
+      } finally {
         this.loading = false;
       }
     },
