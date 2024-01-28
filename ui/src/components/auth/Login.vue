@@ -12,17 +12,23 @@
           <v-text-field
             class="mb-3"
             v-model="form.email"
-            label="E-mail"
-            hide-details
-            required
+            label="Email"
+            :error-messages="
+              v$.form.email.$errors.map((e) => formatErrorMsg(e))
+            "
+            @input="v$.form.email.$touch"
+            @blur="v$.form.email.$touch"
           ></v-text-field>
 
           <v-text-field
             type="password"
             label="Password"
             v-model="form.password"
-            hide-details
-            required
+            :error-messages="
+              v$.form.password.$errors.map((e) => formatErrorMsg(e))
+            "
+            @input="v$.form.password.$touch"
+            @blur="v$.form.password.$touch"
           ></v-text-field>
         </v-card-text>
 
@@ -31,7 +37,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn type="submit" color="blue-grey"> Login </v-btn>
+          <v-btn variant="elevated" type="submit" color="blue-grey">
+            Login
+          </v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -41,15 +49,19 @@
 </template>
 
 <script>
-import Form from "vform";
 import Loading from "../general/Loading.vue";
 import { useToast } from "vue-toastification";
 import config from "../../../config";
+import axios from "axios";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
 
 export default {
   setup() {
-    const toast = useToast();
-    return { toast };
+    return {
+      toast: useToast(),
+      v$: useVuelidate(),
+    };
   },
 
   components: {
@@ -57,28 +69,37 @@ export default {
   },
 
   data: () => ({
-    form: new Form({
+    form: {
       email: "",
       password: "",
-    }),
+    },
     loading: false,
   }),
 
-  created() {
-    console.log('apiBaseUrl :', config.apiBaseUrl);
+  validations() {
+    return {
+      form: {
+        email: { required, email },
+        password: { required },
+      },
+    };
   },
+
   methods: {
     async submit() {
       try {
-        this.loading = true;
-        const response = await this.form.post(
-          "http://127.0.0.1:8000/api/auth/login"
-        );
+        if (await this.v$.$validate()) {
+          this.loading = true;
+          const response = await axios.post(
+            config.apiBaseUrl + "/api/auth/login",
+            this.form
+          );
 
-        if (!response?.data?.error && response?.status == 200) {
-          localStorage.setItem("auth_key", response?.data?.auth_key);
-          this.toast.success(response?.data?.message);
-          this.$router.push({ name: "home" });
+          if (!response?.data?.error && response?.status == 200) {
+            localStorage.setItem("auth_key", response?.data?.auth_key);
+            this.toast.success(response?.data?.message);
+            this.$router.push({ name: "home" });
+          }
         }
       } catch (error) {
         if (error.response.status === 422) {
@@ -94,6 +115,13 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+
+    formatErrorMsg(error) {
+      return error.$message.replace(
+        "Value",
+        error.$property.charAt(0).toUpperCase() + error.$property.slice(1)
+      );
     },
   },
 };
