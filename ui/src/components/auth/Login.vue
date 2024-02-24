@@ -49,9 +49,8 @@
 </template>
 
 <script>
-import Loading from "../general/Loading.vue";
+import Loading from "@/components/general/Loading.vue";
 import { useToast } from "vue-toastification";
-import config from "../../../config";
 import axios from "axios";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
@@ -91,7 +90,7 @@ export default {
         if (await this.v$.$validate()) {
           this.loading = true;
           const response = await axios.post(
-            config.apiBaseUrl + "/api/auth/login",
+            import.meta.env.VITE_BASE_URL + "/api/auth/login",
             this.form
           );
 

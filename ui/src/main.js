@@ -5,16 +5,25 @@
  */
 
 // Plugins
-import { registerPlugins } from '@/plugins'
+import { registerPlugins } from "@/plugins";
 
 // Components
-import App from './App.vue'
+import App from "./App.vue";
 
 // Composables
-import { createApp } from 'vue'
+import { createApp } from "vue";
+import axios from "axios";
 
-const app = createApp(App)
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("auth_key");
+  if (token) {
+    config.headers.auth_key = token;
+  }
+  return config;
+});
 
-registerPlugins(app)
+const app = createApp(App);
 
-app.mount('#app')
+registerPlugins(app);
+
+app.mount("#app");
