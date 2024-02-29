@@ -13,7 +13,11 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     /**
-     * Handle an authentication attempt.
+     * Login
+     *
+     * @param LoginRequest $request
+     * @throws ValidationException
+     * @return JsonResponse
      */
     public function login(LoginRequest $request): JsonResponse
     {

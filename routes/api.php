@@ -21,8 +21,7 @@ Route::middleware(['web', 'api'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
     });
 
-    Route::middleware(['auth', 'auth.session', 'verify_auth_key'])->group(function () {
-
+    Route::middleware(['auth:api', 'verify_auth_key'])->group(function () {
         Route::resource('roles', RoleController::class);
     });
 });
