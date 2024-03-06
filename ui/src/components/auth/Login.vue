@@ -95,7 +95,7 @@ export default {
           );
 
           if (!response?.data?.error && response?.status == 200) {
-            localStorage.setItem("auth_key", response?.data?.auth_key);
+            localStorage.setItem("token", response?.data?.token);
             this.toast.success(response?.data?.message);
             this.$router.push({ name: "home" });
           }

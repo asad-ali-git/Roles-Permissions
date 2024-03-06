@@ -8,7 +8,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  to.name !== "auth.login" && !localStorage.getItem("auth_key")
+  to.name !== "auth.login" && !localStorage.getItem("token")
     ? next({ name: "auth.login" })
     : next();
 });

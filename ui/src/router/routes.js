@@ -3,7 +3,7 @@ const routes = [
   {
     path: "/auth",
     beforeEnter: (to, from, next) => {
-      localStorage.getItem("auth_key") ? next({ name: "home" }) : next();
+      localStorage.getItem("token") ? next({ name: "home" }) : next();
     },
     children: [
       {
