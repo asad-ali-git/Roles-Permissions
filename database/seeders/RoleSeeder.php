@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
             DB::beginTransaction();
 
             $superAdminRole = Role::where('name', Role::ROLE_SUPER_ADMIN)->first();
-            if (!$superAdminRole) {
+            if (! $superAdminRole) {
                 Role::factory()->create();
             }
 

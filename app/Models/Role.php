@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Scopes\SuperAdminRoleScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
@@ -29,7 +30,7 @@ class Role extends Model
 
     const ROLE_STATUS_DISABLED = 'disabled';
 
-    public static function statuses()
+    public static function roleStatuses()
     {
         return [
             self::ROLE_STATUS_ACTIVE => 'Active',
@@ -40,5 +41,10 @@ class Role extends Model
     public function user()
     {
         return $this->hasOne(User::class);
+    }
+
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class);
     }
 }

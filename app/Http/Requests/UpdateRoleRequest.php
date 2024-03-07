@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreRoleRequest extends FormRequest
+class UpdateRoleRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,7 +20,7 @@ class StoreRoleRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'unique:roles,name,except,id',
+                Rule::unique('roles')->ignore($this->role->id),
                 function ($attribute, $value, $fail) {
                     if ($value === Role::ROLE_SUPER_ADMIN) {
                         $fail('The role name "'.Role::ROLE_SUPER_ADMIN.'" is reserved and cannot be created.');

@@ -2,18 +2,18 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoleResource extends JsonResource
+class PermissionResource extends JsonResource
 {
     private array $statuses;
 
     public function __construct($resource)
     {
         parent::__construct($resource);
-        $this->statuses = Role::roleStatuses();
+        $this->statuses = Permission::permissionStatuses();
     }
 
     /**

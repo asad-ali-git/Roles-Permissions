@@ -13,4 +13,6 @@ return [
     */
 
     'invalid_credentials' => 'Invalid Credentials',
+    'cannot_delete_permission_from_role' => 'Cannot delete linked permission from role',
+    'cannot_delete_role_from_permissions' => 'Cannot delete linked role from permissions',
 ];

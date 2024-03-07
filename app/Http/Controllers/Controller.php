@@ -10,7 +10,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function success($data, $resource = null, $useCollection = false, $message = null)
+    public function success($data = [], $resource = null, $useCollection = false, $message = null)
     {
         if ($resource && $useCollection) {
             $data = $resource::collection($data);
