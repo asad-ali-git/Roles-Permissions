@@ -24,4 +24,10 @@ return [
     'permission_created' => 'Permission created successfully',
     'permission_updated' => 'Permission updated successfully',
     'permission_deleted' => 'Permission deleted successfully',
+
+    // USERS
+    'user_created' => 'User created successfully',
+    'user_updated' => 'User updated successfully',
+    'user_deleted' => 'User deleted successfully',
+
 ];

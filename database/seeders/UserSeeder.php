@@ -17,11 +17,11 @@ class UserSeeder extends Seeder
 
             $superAdminRole = Role::withoutGlobalScopes()->where('name', Role::ROLE_SUPER_ADMIN)->first();
             if ($superAdminRole) {
-                $user = User::where('email', 'admin@gmail.com')->first();
-                if (! $user) {
+                $user = User::where('email', User::SUPER_ADMIN_EMAIL)->first();
+                if (!$user) {
                     User::factory()->create([
-                        'name' => 'Admin',
-                        'email' => 'admin@gmail.com',
+                        'name' => User::SUPER_ADMIN_NAME,
+                        'email' => User::SUPER_ADMIN_EMAIL,
                         'role_id' => $superAdminRole->id,
                     ]);
                 }

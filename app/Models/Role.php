@@ -21,7 +21,7 @@ class Role extends Model
      */
     protected static function booted(): void
     {
-        static::addGlobalScope(new SuperAdminRoleScope);
+        // static::addGlobalScope(new SuperAdminRoleScope);
     }
 
     const ROLE_SUPER_ADMIN = 'super-admin';
