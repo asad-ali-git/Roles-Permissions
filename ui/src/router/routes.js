@@ -16,12 +16,27 @@ const routes = [
 
   {
     path: "/",
-    component: () => import("@/layouts/default/Default.vue"),
+    component: () => import("@/layouts/AppLayout.vue"),
     children: [
       {
         path: "",
         name: "home",
-        component: () => import("@/views/Home.vue"),
+        component: () => import("@/components/Home.vue"),
+      },
+      {
+        path: "permissions",
+        name: "permissions",
+        component: () => import("@/components/permissions/Permissions.vue"),
+      },
+      {
+        path: "roles",
+        name: "roles",
+        component: () => import("@/components/roles/Roles.vue"),
+      },
+      {
+        path: "users",
+        name: "users",
+        component: () => import("@/components/users/Users.vue"),
       },
     ],
   },
