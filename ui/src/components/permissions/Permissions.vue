@@ -1,5 +1,46 @@
 <template>
-  <h1 class="ml-5 mt-5">Permissions</h1>
+  <v-card class="ma-5" elevation="4" flat>
+    <template v-slot:title>
+      <v-toolbar flat>
+        <v-toolbar-title>Permissions</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn variant="elevated" color="blue-grey"> New Permission </v-btn>
+      </v-toolbar>
+    </template>
+    <template v-slot:text>
+      <v-text-field
+        v-model="search"
+        label="Search"
+        prepend-inner-icon="mdi-magnify"
+        variant="outlined"
+        hide-details
+        single-line
+      ></v-text-field>
+    </template>
+
+    <v-data-table
+      :loading="tableLoading"
+      :headers="headers"
+      :items="permissions"
+      :sort-by="[{ key: 'id', order: 'asc' }]"
+    >
+      <template v-slot:item.status="{ item }">
+        <v-chip color="success" variant="elevated">
+          {{ item.status }}
+        </v-chip>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+          icon="mdi-pencil"
+          class="me-3"
+          size="large"
+          @click="editItem(item)"
+        />
+        <v-icon icon="mdi-delete" size="large" @click="deleteItem(item)" />
+      </template>
+      <template v-slot:no-data> No Records </template>
+    </v-data-table>
+  </v-card>
 </template>
 
 <script>
@@ -18,22 +59,43 @@ export default {
       v$: useVuelidate(),
     };
   },
-  data: () => {
-    return {};
-  },
-  async created() {
+  data: () => ({
+    tableLoading: false,
+    search: "",
+    dialog: false,
+    dialogDelete: false,
+    headers: [
+      {
+        title: "Name",
+        align: "start",
+        sortable: false,
+        key: "name",
+      },
+      { title: "Description", key: "description" },
+      { title: "Status", key: "status" },
+      { title: "Actions", key: "actions", sortable: false },
+    ],
+    permissions: [],
+    editedItem: {
+      name: "",
+      description: "",
+    },
+  }),
+
+  created() {
     this.getPermissions();
   },
+
   methods: {
     async getPermissions() {
       try {
         if (await this.v$.$validate()) {
-          this.loading = true;
-          const response = await axios.get(
+          this.tableLoading = true;
+          const { data } = await axios.get(
             import.meta.env.VITE_BASE_URL + "/api/permissions",
             this.form
           );
-          console.log("response :", response);
+          this.permissions = data.data;
         }
       } catch (error) {
         if (error.response.status === 422) {
@@ -47,8 +109,17 @@ export default {
           this.toast.error("API Error on server side");
         }
       } finally {
-        this.loading = false;
+        this.tableLoading = false;
       }
+    },
+
+    editItem(permission) {
+      this.editedItem = Object.assign({}, permission);
+      this.dialog = true;
+    },
+
+    deleteItem(permission) {
+      this.dialogDelete = true;
     },
   },
 };

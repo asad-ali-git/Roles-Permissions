@@ -51,6 +51,9 @@
       <v-app-bar-title class="font-weight-bold"
         >Roles Permissions</v-app-bar-title
       >
+      <v-btn icon>
+        <v-icon>mdi-export</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-main>
