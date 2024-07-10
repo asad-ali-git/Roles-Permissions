@@ -51,7 +51,7 @@
 <script>
 import Loading from "@/components/general/Loading.vue";
 import { useToast } from "vue-toastification";
-import axios from "axios";
+import axios from "../../axios.js";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 
@@ -89,10 +89,7 @@ export default {
       try {
         if (await this.v$.$validate()) {
           this.loading = true;
-          const response = await axios.post(
-            import.meta.env.VITE_BASE_URL + "/api/auth/login",
-            this.form
-          );
+          const response = await axios.post("/auth/login", this.form);
 
           if (!response?.data?.error && response?.status == 200) {
             localStorage.setItem("token", response?.data?.token);

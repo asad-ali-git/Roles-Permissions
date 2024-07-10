@@ -64,7 +64,7 @@
 
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
+import axios from "../axios.js";
 import { useRouter } from "vue-router";
 
 const sideMenus = [
@@ -100,11 +100,7 @@ const router = useRouter();
 
 const logout = async () => {
   try {
-    const response = await axios.post(
-      import.meta.env.VITE_BASE_URL + "/api/auth/logout"
-    );
-    console.log(response.data.message);
-
+    await axios.post("/auth/logout");
     localStorage.removeItem("token");
     await router.push({ name: "auth.login" });
   } catch (error) {

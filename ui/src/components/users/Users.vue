@@ -5,7 +5,7 @@
 <script>
 import Loading from "@/components/general/Loading.vue";
 import { useToast } from "vue-toastification";
-import axios from "axios";
+import axios from "../../axios.js";
 import { useVuelidate } from "@vuelidate/core";
 
 export default {
@@ -29,10 +29,7 @@ export default {
       try {
         if (await this.v$.$validate()) {
           this.loading = true;
-          const response = await axios.get(
-            import.meta.env.VITE_BASE_URL + "/api/users",
-            this.form
-          );
+          const response = await axios.get("/users", this.form);
           console.log("response :", response);
         }
       } catch (error) {
